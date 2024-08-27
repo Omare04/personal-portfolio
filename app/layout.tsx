@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link rel="icon" type='/images/svg+xml' href="/code.svg" sizes="32x32"/>
+      </head>
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+      </style>
+      <body className={inter.className }>
+        {children}
+      </body>
     </html>
   );
 }
