@@ -117,25 +117,25 @@ function Contact() {
   };
   return (
     <div
-      className="max-w-4xl w-full justify-center snap-center mt-11 flex flex-col mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black"
+      className="max-w-4xl w-full justify-center snap-center mt-8 md:mt-11 flex flex-col mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black"
       id="contact"
     >
       <Toaster />
       <div>
-        <h2 className="font-bold text-4xl text-neutral-800 dark:text-neutral-200">
+        <h2 className="font-bold text-3xl md:text-4xl text-neutral-800 dark:text-neutral-200">
           Get In touch
         </h2>
-        <p className="text-neutral-600 text-lg mt-2 dark:text-neutral-300">
+        <p className="text-neutral-600 text-sm md:text-lg mt-2 dark:text-neutral-300">
           You can alternatively contact me at:
-          <span className="font-bold pl-3 text-xl">
+          <span className="block md:inline font-bold mt-1 md:mt-0 md:pl-3 md:text-xl">
             omarelmasaoudi04@gmail.com
           </span>
         </p>
       </div>
 
-      <form className="my-8" onSubmit={handleSubmit}>
-        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-          <LabelInputContainer>
+      <form className="my-6 md:my-8" onSubmit={handleSubmit}>
+        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mb-4">
+          <LabelInputContainer className="md:w-1/2">
             <Label htmlFor="firstName">First name</Label>
             <Input
               id="firstname"
@@ -148,7 +148,7 @@ function Contact() {
               required
             />
           </LabelInputContainer>
-          <LabelInputContainer>
+          <LabelInputContainer className="md:w-1/2">
             <Label htmlFor="lastName">Last name</Label>
             <Input
               id="lastname"
@@ -162,7 +162,7 @@ function Contact() {
             />
           </LabelInputContainer>
         </div>
-        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer className="md:w-1/2">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -191,13 +191,13 @@ function Contact() {
           </LabelInputContainer>
         </div>
 
-        <LabelInputContainer className="mb-8">
+        <LabelInputContainer className="mb-6 md:mb-8">
           <Label htmlFor="message">Your Message</Label>
           <TextArea
             placeholder="Write your message here..."
             id="message"
             name="message"
-            className="min-h-[150px] bg-white resize-y"
+            className="min-h-[120px] md:min-h-[150px] bg-white resize-y"
             value={formData.message}
             onChange={handleChange}
             required
@@ -205,7 +205,7 @@ function Contact() {
         </LabelInputContainer>
 
         <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-12 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
           disabled={isSubmitting}
         >

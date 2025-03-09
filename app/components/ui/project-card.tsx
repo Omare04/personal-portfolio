@@ -31,26 +31,26 @@ export const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   return (
     <>
-      <CardHeader className="pt-4 pb-2 px-5">
+      <CardHeader className="pt-4 pb-2 px-4 md:px-5">
         <div className="flex justify-between items-center">
-          <div className="pr-12"> {/* Add space for the button */}
-            <CardTitle className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+          <div className="pr-12 max-w-[80%]"> {/* Limit width on small screens */}
+            <CardTitle className="text-xl md:text-2xl font-bold text-transparent text-blue-400 bg-clip-text  truncate">
               {title}
             </CardTitle>
           </div>
           <motion.div
             whileHover={{ rotate: 15, scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="hidden md:block"
+            className="flex"
           >
-            <a href={repo} target="_blank" rel="noopener noreferrer" className="transition-all">
-              <IconBrandGithub size={24} className="text-white hover:text-blue-400" />
+            <a href={repo} target="_blank" rel="noopener noreferrer" className="transition-all" aria-label="GitHub Repository">
+              <IconBrandGithub size={22} className="text-white hover:text-blue-400" />
             </a>
           </motion.div>
         </div>
       </CardHeader>
-      <CardContent className="p-5 pt-0">
-        <div className="h-auto w-full flex flex-col gap-4">
+      <CardContent className="p-3 md:p-5 pt-0">
+        <div className="h-auto w-full flex flex-col gap-3 md:gap-4">
           {img && img.length > 0 ? (
             <div className="relative rounded-lg overflow-hidden border border-gray-700 shadow-xl">
               <Swiper
@@ -67,11 +67,11 @@ export const ProjectCard: FC<ProjectCardProps> = ({
                 }}
                 effect="fade"
                 modules={[Navigation, Pagination, Autoplay, EffectFade]}
-                className="rounded-lg h-auto w-full cursor-pointer"
+                className="rounded-lg h-auto w-full touch-manipulation"
               >
                 {img.map((src, index) => (
                   <SwiperSlide key={index}>
-                    <div className="relative w-full h-[350px] md:h-[400px] lg:h-[450px] border-b border-gray-700">
+                    <div className="relative w-full h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] border-b border-gray-700">
                       <Image
                         src={src}
                         className="w-full h-full object-contain bg-black/80"
@@ -95,7 +95,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           )}
           
           <div className="prose prose-invert max-w-none">
-            <div className="text-base text-gray-200 leading-relaxed">
+            <div className="text-sm sm:text-base text-gray-200 leading-relaxed">
               {/* Only show the first two sentences */}
               {description.split('.').slice(0, 2).join('.')}
               {description.split('.').length > 2 ? '...' : '.'}

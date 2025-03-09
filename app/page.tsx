@@ -13,16 +13,20 @@ import { BackgroundBeams } from "./components/ui/background-beam";
 // In your main component
 export default function Home() {
   return (
-    <main className="min-h-screen font-sans snap-y snap-mandatory overflow-hidden ">
+    <>
+      {/* Navbar positioned outside and above all other content */}
       <Navbar />
-      <div className="relative w-full min-h-full flex-col flex items-center bg-black snap-y snap-mandatory overflow-hidden">
-        <Homepage />
-        <About />
-        <Projects />
-        <Certifications />
-        <Contact />
-      </div>
-      <BackgroundBeams />
-    </main>
+      
+      <main className="min-h-screen font-sans snap-y snap-mandatory overflow-hidden">
+        <div className="relative w-full min-h-full flex-col flex items-center bg-black snap-y snap-mandatory overflow-hidden">
+          <Homepage />
+          <About />
+          <Projects />
+          <Certifications />
+          <Contact />
+        </div>
+        <BackgroundBeams />
+      </main>
+    </>
   );
 }

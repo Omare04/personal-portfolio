@@ -93,9 +93,9 @@ const projectsData: ProjectInterface[] = [
       <IconBrandAmazon size={40} style={{ color: "#FF9900" }} key="aws" />,
     ],
     role: "Lead Developer",
-    timeline: "Jan 2023 - Present",
+    timeline: "February 2024 - April 2024",
     teamSize: "3 developers",
-    status: "Active Development",
+    status: "Complete",
     key_features: [
       "Complete patient data management system",
       "Inventory tracking and purchase order generation",
@@ -129,7 +129,7 @@ const projectsData: ProjectInterface[] = [
       <IconBrandAmazon size={40} style={{ color: "#FF9900" }} key="aws" />,
     ],
     role: "Solo Developer",
-    timeline: "Jun 2022 - Dec 2022",
+    timeline: "May 2023 - August 2023",
     teamSize: "1 developer",
     status: "Completed",
     key_features: [
@@ -156,7 +156,7 @@ const projectsData: ProjectInterface[] = [
       <IconBrandNextjs size={40} style={{ color: "#fff" }} key="nextjs" />,
     ],
     role: "Frontend Developer",
-    timeline: "Mar 2022 - Apr 2022",
+    timeline: "Aug 2024 - Aug 2024",
     teamSize: "1 developer",
     status: "Completed",
     liveDemoUrl: "https://tsacatering.com",
@@ -179,7 +179,7 @@ const projectsData: ProjectInterface[] = [
       <IconBrandMysql size={40} style={{ color: "#00758F" }} key="mysql" />,
     ],
     role: "Backend Developer",
-    timeline: "Nov 2022 - Jan 2023",
+    timeline: "February 2024 - February 2024",
     teamSize: "1 developer",
     status: "Completed",
     key_features: [
@@ -255,11 +255,33 @@ const Projects = () => {
       id="projects"
     >
       <div className="max-w-[1400px] mx-auto">
-      
+       
+        
+        {/* Mobile Project Selection Dropdown (visible only on mobile) */}
+        <div className="block lg:hidden mb-6">
+          <label htmlFor="mobile-project-select" className="block text-sm font-medium text-gray-300 mb-2">
+            Select Project
+          </label>
+          <select 
+            id="mobile-project-select"
+            className="bg-black/60 border border-gray-700 rounded-lg p-3 w-full text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={selectedProject.title}
+            onChange={(e) => {
+              const selected = projectsData.find(p => p.title === e.target.value);
+              if (selected) setSelectedProject(selected);
+            }}
+          >
+            {projectsData.map((project) => (
+              <option key={project.title} value={project.title}>
+                {project.title}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Project selection sidebar */}
-          <div className="lg:col-span-3 order-2 lg:order-1">
+          {/* Project selection sidebar - hidden on mobile */}
+          <div className="hidden lg:block lg:col-span-3 order-2 lg:order-1">
             <div className="sticky-sidebar space-y-6 custom-scrollbar pr-2">
               <ProjectsIndex
                 projects={projectsData}
@@ -278,7 +300,7 @@ const Projects = () => {
                     {selectedProject.stack.map((icon, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-center  bg-gray-800/70 rounded-md hover:bg-gray-700/70 transition-all duration-200 shadow-md"
+                        className="flex items-center justify-center bg-gray-800/70 rounded-md hover:bg-gray-700/70 transition-all duration-200 shadow-md"
                       >
                         {icon}
                       </div>
@@ -299,18 +321,18 @@ const Projects = () => {
                 description={selectedProject.description}
                 repo={selectedProject.repo}
               />
-
+              
               {/* Project summary */}
               <div className="border-t border-gray-700 bg-black/40">
                 <div className="p-4">
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">
+                  <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm text-gray-300">
                     {selectedProject.timeline && (
                       <div className="flex items-center gap-2">
                         <IconCalendar className="text-blue-400" size={16} />
                         <span>{selectedProject.timeline}</span>
                       </div>
                     )}
-
+                    
                     {selectedProject.role && (
                       <div className="flex items-center gap-2">
                         <IconBriefcase className="text-blue-400" size={16} />
@@ -321,9 +343,9 @@ const Projects = () => {
                     <div className="ml-auto z-10">
                       <button
                         onClick={openDrawer}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition-colors text-sm font-medium shadow-lg"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 md:px-4 md:py-2 rounded-md flex items-center gap-2 transition-colors text-xs md:text-sm font-medium shadow-lg"
                       >
-                        <IconInfoCircle size={18} />
+                        <IconInfoCircle size={16} className="hidden xs:inline" />
                         Project Details
                       </button>
                     </div>
@@ -333,10 +355,30 @@ const Projects = () => {
             </div>
           </div>
         </div>
+        
+        {/* Mobile Tech Stack Display (visible only on mobile) */}
+        <div className="lg:hidden mt-6 bg-black/50 border border-gray-700 rounded-lg p-4">
+          <div className="relative">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+            <h3 className="text-sm font-semibold text-blue-400 mb-3">
+              Technologies Used
+            </h3>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {selectedProject.stack.map((icon, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-center bg-gray-800/70 rounded-md hover:bg-gray-700/70 transition-all duration-200 shadow-md"
+                >
+                  {icon}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-
+      
       {/* Project Details Drawer */}
-      <ProjectDrawer
+      <ProjectDrawer 
         isOpen={isDrawerOpen}
         onClose={closeDrawer}
         project={selectedProject}
