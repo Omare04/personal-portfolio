@@ -7,6 +7,7 @@ import Navbar from "./components/ui/navbar";
 import Projects from "./components/projects";
 import About from "./components/about";
 import Contact from "./components/contact";
+import Certifications from "./components/certifications";
 import { BackgroundBeams } from "./components/ui/background-beam";
 
 // In your main component
@@ -18,6 +19,7 @@ export default function Home() {
         <Homepage />
         <About />
         <Projects />
+        <Certifications />
         <Contact />
       </div>
       <BackgroundBeams />

@@ -6,6 +6,7 @@ const Navbar = () => {
   const items = [
     { title: "About", id: "about" },
     { title: "Projects", id: "projects" },
+    { title: "Certifications", id: "certifications" },
     { title: "Contact", id: "contact" },
   ];
 
@@ -19,7 +20,7 @@ const Navbar = () => {
   return (
     <nav className="absolute top-0 right-0 w-full bg-black bg-opacity-5 p-4 z-50 flex items-center justify-between pr-10 pt-7">
       <IconCode className="w-8 h-8 text-white ml-6" />
-      <ul className="flex space-x-16">
+      <ul className="flex space-x-10 md:space-x-16">
         {items.map((item) => (
           <li key={item.id} className="text-white cursor-pointer text-lg">
             <button onClick={() => scrollToSection(item.id)}>

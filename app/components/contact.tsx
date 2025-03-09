@@ -28,6 +28,7 @@ function Contact() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     message: "",
   });
   const [status, setStatus] = useState("");
@@ -41,6 +42,32 @@ function Contact() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+        style: toastStyles.error,
+        duration: 3000,
+      });
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+        style: toastStyles.error,
+        duration: 3000,
+      });
+      return;
+    }
+    
     setStatus("Sending...");
     setIsSubmitting(true);
 
@@ -53,34 +80,36 @@ function Contact() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setStatus("Message sent successfully!");
-        setFormData({ firstName: "", lastName: "", email: "", message: "" });
+        setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" });
         toast({
           title: "Message Sent!",
-          description: "Your message was sent successfully.",
+          description: "Your message was sent successfully. I'll get back to you soon!",
           style: toastStyles.success,
-          duration: 3000,
+          duration: 5000,
         });
       } else {
-        setStatus("Failed to send message.");
+        setStatus(`Failed to send message: ${data.message || ''}`);
         toast({
           title: "Message Failed To Send",
-          description: "Your message failed to send, please try again later.",
+          description: "Your message failed to send. Please try again later or email me directly.",
           variant: "destructive",
           style: toastStyles.error,
-          duration: 3000,
+          duration: 5000,
         });
       }
     } catch (error) {
       console.error("Error:", error);
       setStatus("An error occurred.");
       toast({
-        title: "Message Failed To Send",
-        description: "Your message failed to send, please try again later.",
+        title: "Connection Error",
+        description: "There was a problem connecting to the server. Please try again later.",
         variant: "destructive",
         style: toastStyles.error,
-        duration: 3000,
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
@@ -133,43 +162,72 @@ function Contact() {
             />
           </LabelInputContainer>
         </div>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            placeholder="example_email@gmail.com"
-            id="email"
-            type="email"
-            name="email"
-            className="bg-white"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </LabelInputContainer>
+        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+          <LabelInputContainer className="md:w-1/2">
+            <Label htmlFor="email">Email Address</Label>
+            <Input
+              placeholder="example_email@gmail.com"
+              id="email"
+              type="email"
+              name="email"
+              className="bg-white"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </LabelInputContainer>
+
+          <LabelInputContainer className="md:w-1/2">
+            <Label htmlFor="phone">Phone Number <span className="text-xs text-gray-500">(Optional)</span></Label>
+            <Input
+              placeholder="Your phone number"
+              id="phone"
+              type="tel"
+              name="phone"
+              className="bg-white"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </LabelInputContainer>
+        </div>
 
         <LabelInputContainer className="mb-8">
-          <Label htmlFor="message">Message</Label>
+          <Label htmlFor="message">Your Message</Label>
           <TextArea
+            placeholder="Write your message here..."
             id="message"
             name="message"
+            className="min-h-[150px] bg-white resize-y"
             value={formData.message}
             onChange={handleChange}
             required
-            placeholder="Message"
-            rows={8}
-            className="mt-2"
           />
         </LabelInputContainer>
 
         <button
-          className={`bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] ${
-            isSubmitting ? "opacity-50 cursor-not-allowed" : " "
-          }`}
+          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
+          disabled={isSubmitting}
         >
-          {isSubmitting ? "Sending..." : "Send"}
+          {isSubmitting ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sending...
+            </span>
+          ) : (
+            "Send Message"
+          )}
           <BottomGradient />
         </button>
+        
+        {status && (
+          <p className={`mt-2 text-sm ${status.includes("success") ? "text-green-500" : status === "Sending..." ? "text-blue-500" : "text-red-500"}`}>
+            {status}
+          </p>
+        )}
 
         <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
       </form>

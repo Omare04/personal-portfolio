@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProjectCard } from "./ui/project-card";
+import ProjectDrawer from "./ui/project-drawer";
 import {
   IconBrandDocker,
   IconBrandTypescript,
@@ -14,14 +15,27 @@ import {
   IconBrandGithub,
   IconBrandVite,
   IconBrandNextjs,
+  IconCalendar,
+  IconUsers,
+  IconBriefcase,
+  IconRocket,
+  IconExternalLink,
+  IconInfoCircle,
 } from "@tabler/icons-react";
+import { motion } from "framer-motion";
 
 interface ProjectInterface {
   title: string;
   description: string;
   img: string[];
   repo: string;
-  stack: JSX.Element[]; // Since you're using JSX elements like icons
+  stack: JSX.Element[];
+  role?: string;
+  timeline?: string;
+  teamSize?: string;
+  status?: string;
+  liveDemoUrl?: string;
+  key_features?: string[];
 }
 
 const projectsData: ProjectInterface[] = [
@@ -40,17 +54,18 @@ const projectsData: ProjectInterface[] = [
     ],
     repo: "https://github.com/Omare04/Medivac-Software-System",
     stack: [
-      <IconBrandTypescript size={55} style={{ color: "#007ACC" }} />,
-      <IconBrandGolang size={55} style={{ color: "#00ADD8" }} />,
-      <IconBrandReact size={55} style={{ color: "#61DAFB" }} />,
-      <IconBrandDocker size={55} style={{ color: "#2496ED" }} />,
+      <IconBrandTypescript size={40} style={{ color: "#007ACC" }} key="ts" />,
+      <IconBrandGolang size={40} style={{ color: "#00ADD8" }} key="go" />,
+      <IconBrandReact size={40} style={{ color: "#61DAFB" }} key="react" />,
+      <IconBrandDocker size={40} style={{ color: "#2496ED" }} key="docker" />,
       <svg
-        width="55px"
-        height="55px"
+        width="40px"
+        height="40px"
         viewBox="-4 0 255 255"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMinYMin meet"
         fill="#000000"
+        key="postgres"
       >
         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
         <g
@@ -74,8 +89,20 @@ const projectsData: ProjectInterface[] = [
           ></path>
         </g>
       </svg>,
-      <IconBrandVite size={55} style={{ color: "#aa8ae5" }} />,
-      <IconBrandAmazon size={55} style={{ color: "#FF9900" }} />,
+      <IconBrandVite size={40} style={{ color: "#aa8ae5" }} key="vite" />,
+      <IconBrandAmazon size={40} style={{ color: "#FF9900" }} key="aws" />,
+    ],
+    role: "Lead Developer",
+    timeline: "Jan 2023 - Present",
+    teamSize: "3 developers",
+    status: "Active Development",
+    key_features: [
+      "Complete patient data management system",
+      "Inventory tracking and purchase order generation",
+      "Personnel scheduling and assignment",
+      "Secure authentication with separate identity provider",
+      "Docker containerization for easy deployment",
+      "Cloud deployment on AWS EBS",
     ],
   },
 
@@ -95,11 +122,22 @@ const projectsData: ProjectInterface[] = [
     ],
     repo: "https://github.com/Omare04/Operations-Manager-Application",
     stack: [
-      <IconBrandTypescript size={55} style={{ color: "#007ACC" }} />,
-      <IconBrandReact size={55} style={{ color: "#61DAFB" }} />,
-      <IconBrandMysql size={55} style={{ color: "#00758F" }} />,
-      <IconBrandVite size={55} style={{ color: "#aa8ae5" }} />,
-      <IconBrandAmazon size={55} style={{ color: "#FF9900" }} />,
+      <IconBrandTypescript size={40} style={{ color: "#007ACC" }} key="ts" />,
+      <IconBrandReact size={40} style={{ color: "#61DAFB" }} key="react" />,
+      <IconBrandMysql size={40} style={{ color: "#00758F" }} key="mysql" />,
+      <IconBrandVite size={40} style={{ color: "#aa8ae5" }} key="vite" />,
+      <IconBrandAmazon size={40} style={{ color: "#FF9900" }} key="aws" />,
+    ],
+    role: "Solo Developer",
+    timeline: "Jun 2022 - Dec 2022",
+    teamSize: "1 developer",
+    status: "Completed",
+    key_features: [
+      "Real-time inventory tracking system",
+      "Location-based asset management",
+      "Status monitoring for physical resources",
+      "Customizable reporting and analytics",
+      "User-friendly interface for non-technical staff",
     ],
   },
   {
@@ -114,8 +152,20 @@ const projectsData: ProjectInterface[] = [
     ],
     repo: "https://github.com/Omare04/TSA-Catering-site",
     stack: [
-      <IconBrandTypescript size={55} style={{ color: "#007ACC" }} />,
-      <IconBrandNextjs size={55} style={{ color: "#fff" }} />,
+      <IconBrandTypescript size={40} style={{ color: "#007ACC" }} key="ts" />,
+      <IconBrandNextjs size={40} style={{ color: "#fff" }} key="nextjs" />,
+    ],
+    role: "Frontend Developer",
+    timeline: "Mar 2022 - Apr 2022",
+    teamSize: "1 developer",
+    status: "Completed",
+    liveDemoUrl: "https://tsacatering.com",
+    key_features: [
+      "Responsive design for all device sizes",
+      "SEO-optimized content structure",
+      "Menu showcasing with visual components",
+      "Contact form integration",
+      "Fast loading with Next.js optimization",
     ],
   },
   {
@@ -125,8 +175,19 @@ const projectsData: ProjectInterface[] = [
     img: [],
     repo: "https://github.com/Omare04/TS-Identity-Provider",
     stack: [
-      <IconBrandTypescript size={55} style={{ color: "#007ACC" }} />,
-      <IconBrandMysql size={55} style={{ color: "#00758F" }} />,
+      <IconBrandTypescript size={40} style={{ color: "#007ACC" }} key="ts" />,
+      <IconBrandMysql size={40} style={{ color: "#00758F" }} key="mysql" />,
+    ],
+    role: "Backend Developer",
+    timeline: "Nov 2022 - Jan 2023",
+    teamSize: "1 developer",
+    status: "Completed",
+    key_features: [
+      "Secure user authentication with JWT",
+      "Role-based access control",
+      "Password hashing and security measures",
+      "Dockerized for isolation and security",
+      "Integration API for other services",
     ],
   },
 
@@ -144,101 +205,240 @@ Players enter their usernames and begin the game, which then progresses through 
     stack: [
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="56"
-        height="56"
+        width="40"
+        height="40"
         viewBox="0 0 32 32"
+        key="java"
       >
         <path
           d="M11.622 24.74s-1.23.748.855.962c2.51.32 3.847.267 6.625-.267a10.02 10.02 0 0 0 1.763.855c-6.25 2.672-14.16-.16-9.244-1.55zm-.8-3.473s-1.336 1.015.748 1.23c2.725.267 4.862.32 8.55-.427a3.26 3.26 0 0 0 1.282.801c-7.534 2.244-15.976.214-10.58-1.603zm14.747 6.09s.908.748-1.015 1.336c-3.58 1.07-15.014 1.39-18.22 0-1.122-.48 1.015-1.175 1.7-1.282.695-.16 1.07-.16 1.07-.16-1.23-.855-8.175 1.763-3.526 2.51 12.77 2.084 23.296-.908 19.983-2.404zM12.2 17.633s-5.824 1.39-2.084 1.87c1.603.214 4.755.16 7.694-.053 2.404-.214 4.81-.64 4.81-.64s-.855.374-1.443.748c-5.93 1.55-17.312.855-14.052-.748 2.778-1.336 5.076-1.175 5.076-1.175zm10.42 5.824c5.984-3.1 3.206-6.09 1.282-5.717-.48.107-.695.214-.695.214s.16-.32.534-.427c3.794-1.336 6.786 4.007-1.23 6.09 0 0 .053-.053.107-.16zm-9.83 8.442c5.77.374 14.587-.214 14.8-2.94 0 0-.427 1.07-4.755 1.87-4.916.908-11.007.8-14.587.214 0 0 .748.64 4.542.855z"
           fill="#4e7896"
         />
         <path
-          d="M18.996.001s3.313 3.366-3.152 8.442c-5.183 4.114-1.175 6.465 0 9.137-3.046-2.725-5.236-5.13-3.74-7.373C14.294 6.893 20.332 5.3 18.996.001zm-1.7 15.335c1.55 1.763-.427 3.366-.427 3.366s3.954-2.03 2.137-4.542c-1.656-2.404-2.94-3.58 4.007-7.587 0 0-10.953 2.725-5.717 8.763z"
+          d="M18.996.001s3.313 3.366-3.152 8.442c-5.183 4.114-1.175 6.465 0 9.137-3.046-2.725-5.236-5.13-5.13-7.373C14.294 6.893 20.332 5.3 18.996.001zm-1.7 15.335c1.55 1.763-.427 3.366-.427 3.366s3.954-2.03 2.137-4.542c-1.656-2.404-2.94-3.58 4.007-7.587 0 0-10.953 2.725-5.717 8.763z"
           fill="#f58219"
         />
       </svg>,
+    ],
+    role: "Game Developer",
+    timeline: "Oct 2021 - Dec 2021",
+    teamSize: "1 developer",
+    status: "Completed",
+    key_features: [
+      "Java Swing GUI implementation",
+      "Multi-player support",
+      "Dynamic game board with snakes and ladders",
+      "Dice rolling mechanics",
+      "Score tracking system",
     ],
   },
 ];
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(projectsData[0]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const openDrawer = () => setIsDrawerOpen(true);
+  const closeDrawer = () => setIsDrawerOpen(false);
 
   return (
-    <div
-      className="z-50 flex justify-center items-start gap-12 h-screen w-full flex-wrap p-10 px-20 snap-center"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.5 }}
+      className="z-40 min-h-screen w-full p-4 md:p-8 lg:p-12 snap-center bg-gradient-to-b from-black/30 to-transparent"
       id="projects"
     >
-      <div className="flex gap-9 snap-center">
-        <ProjectCard
-          img={selectedProject.img}
-          title={selectedProject.title}
-          description={selectedProject.description}
-          repo={selectedProject.repo}
-        />
-        <div className=" flex flex-col gap-5 flex-wrap snap-center">
-          <ProjectsIndex
-            projects={projectsData}
-            setSelectedProject={setSelectedProject}
-          />
-          <Stack icons={selectedProject.stack} />
+      <div className="max-w-[1400px] mx-auto">
+      
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Project selection sidebar */}
+          <div className="lg:col-span-3 order-2 lg:order-1">
+            <div className="sticky-sidebar space-y-6 custom-scrollbar pr-2">
+              <ProjectsIndex
+                projects={projectsData}
+                setSelectedProject={setSelectedProject}
+                selectedProject={selectedProject}
+              />
+
+              {/* Tech stack section moved under project selection */}
+              <div className="bg-black/50 border border-gray-700 rounded-lg p-4 mt-4">
+                <div className="relative">
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+                  <h3 className="text-sm font-semibold text-blue-400 mb-3">
+                    Technologies Used
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.stack.map((icon, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-center  bg-gray-800/70 rounded-md hover:bg-gray-700/70 transition-all duration-200 shadow-md"
+                      >
+                        {icon}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main content area - Clean and simplified */}
+          <div className="lg:col-span-9 order-1 lg:order-2">
+            <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden shadow-lg relative">
+              {/* Project Card */}
+              <ProjectCard
+                img={selectedProject.img}
+                title={selectedProject.title}
+                description={selectedProject.description}
+                repo={selectedProject.repo}
+              />
+
+              {/* Project summary */}
+              <div className="border-t border-gray-700 bg-black/40">
+                <div className="p-4">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">
+                    {selectedProject.timeline && (
+                      <div className="flex items-center gap-2">
+                        <IconCalendar className="text-blue-400" size={16} />
+                        <span>{selectedProject.timeline}</span>
+                      </div>
+                    )}
+
+                    {selectedProject.role && (
+                      <div className="flex items-center gap-2">
+                        <IconBriefcase className="text-blue-400" size={16} />
+                        <span>{selectedProject.role}</span>
+                      </div>
+                    )}
+
+                    <div className="ml-auto z-10">
+                      <button
+                        onClick={openDrawer}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition-colors text-sm font-medium shadow-lg"
+                      >
+                        <IconInfoCircle size={18} />
+                        Project Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Project Details Drawer */}
+      <ProjectDrawer
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        project={selectedProject}
+      />
+    </motion.div>
   );
 };
 
 interface ProjectsIndexProps {
   projects: ProjectInterface[];
   setSelectedProject: (project: ProjectInterface) => void;
+  selectedProject: ProjectInterface;
 }
 
-
-const ProjectsIndex: React.FC<ProjectsIndexProps> = ({ projects, setSelectedProject }) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-
+const ProjectsIndex: React.FC<ProjectsIndexProps> = ({
+  projects,
+  setSelectedProject,
+  selectedProject,
+}) => {
   return (
-    <div className="flex flex-col">
-      <h1 className="text-2xl font-bold pb-6 pl-3">Notable Projects</h1>
-      <ul className="w-full space-y-5">
+    <div className="bg-black/50 border border-gray-700 rounded-lg p-4">
+      <h2 className="text-xl font-bold mb-4 text-blue-400">Projects</h2>
+      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
         {projects.map((project, index) => (
-          <li
+          <motion.div
             key={index}
-            className={`cursor-pointer p-4 rounded-lg ${
-              activeIndex === index
-                ? "bg-gray-200 bg-opacity-15 text-white"
-                : "bg-black bg-opacity-30 text-white"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`cursor-pointer p-3 rounded-lg transition-all duration-200 ${
+              selectedProject.title === project.title
+                ? "bg-blue-900/50 border-l-4 border-blue-400"
+                : "bg-gray-900/50 hover:bg-gray-800/50"
             }`}
-            onClick={() => {
-              setActiveIndex(index);
-              setSelectedProject(project);
-            }}
+            onClick={() => setSelectedProject(project)}
           >
-            {project.title}
-          </li>
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium truncate">{project.title}</h3>
+              {selectedProject.title === project.title && (
+                <motion.div
+                  className="w-2 h-2 rounded-full bg-blue-400"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </div>
+            {project.timeline && (
+              <p className="text-xs text-gray-400 mt-1">{project.timeline}</p>
+            )}
+          </motion.div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
-
 
 interface StackProps {
   icons: JSX.Element[];
 }
 
 const Stack: React.FC<StackProps> = ({ icons }) => {
+  // Map of known icon keys to proper display names
+  const techNames: Record<string, string> = {
+    ts: "TypeScript",
+    go: "Go",
+    react: "React",
+    docker: "Docker",
+    postgres: "PostgreSQL",
+    vite: "Vite",
+    aws: "AWS",
+    mysql: "MySQL",
+    nextjs: "Next.js",
+    java: "Java",
+    mongodb: "MongoDB",
+    github: "GitHub",
+  };
+
   return (
-    <div className="flex flex-col gap-5 pl-3 pt-5">
-      <h1 className="font-bold text-xl">Tech Stack</h1>
-      <ul className="flex gap-4 flex-wrap">
-        {icons.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
+    <div className="bg-black/50 border border-gray-700 rounded-lg p-4">
+      <h2 className="text-xl font-bold mb-4 text-blue-400">Tech Stack</h2>
+      <div className="flex flex-wrap gap-3 justify-center">
+        {icons.map((item, index) => {
+          // Get the key if it exists in the props
+          const key = (item as any).key || "";
+          const techName = techNames[key] || "Technology";
+
+          return (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.1, y: -5 }}
+              className="p-2 bg-gray-900/70 rounded-lg transition-all duration-200 hover:bg-gray-800/70 group relative"
+            >
+              {item}
+              <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100 whitespace-nowrap z-10">
+                {techName}
+              </span>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 };
-
 
 export default Projects;
