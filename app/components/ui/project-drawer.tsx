@@ -19,214 +19,152 @@ const ProjectDrawer: React.FC<ProjectDrawerProps> = ({ isOpen, onClose, project 
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
-      // Save current scroll position
-      const scrollY = window.scrollY;
-      // Add styles to lock scroll
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-      
-      // Append drawer-active class to html for global styling
-      document.documentElement.classList.add('drawer-active');
-      
-      // Clean up function
       return () => {
-        // Remove styles and restore scroll position
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
         document.body.style.overflow = '';
-        document.documentElement.classList.remove('drawer-active');
-        window.scrollTo(0, scrollY);
       };
     }
   }, [isOpen]);
-  
-  // Add global styles when component mounts
-  useEffect(() => {
-    // Add a style tag to ensure the drawer is always on top
-    const styleTag = document.createElement('style');
-    styleTag.innerHTML = `
-      .project-drawer-backdrop {
-        position: fixed !important;
-        inset: 0 !important;
-        z-index: 2147483647 !important; /* Max possible z-index */
-        background: rgba(0,0,0,0.5) !important;
-        backdrop-filter: blur(4px) !important;
-      }
-      .project-drawer {
-        position: fixed !important;
-        top: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        z-index: 2147483647 !important; /* Max possible z-index */
-        width: 100% !important;
-        background: rgba(0,0,0,0.9) !important;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.5) !important;
-      }
-      @media (min-width: 640px) {
-        .project-drawer {
-          width: 28rem !important;
-        }
-      }
-      @media (min-width: 768px) {
-        .project-drawer {
-          width: 32rem !important;
-        }
-      }
-      html.drawer-active * {
-        z-index: auto !important;
-      }
-      html.drawer-active .project-drawer-backdrop,
-      html.drawer-active .project-drawer {
-        z-index: 2147483647 !important;
-      }
-    `;
-    document.head.appendChild(styleTag);
-    
-    return () => {
-      document.head.removeChild(styleTag);
-    };
-  }, []);
+
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div 
-            className="project-drawer-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleBackdropClick}
-          />
-          
-          {/* Drawer */}
-          <motion.div 
-            className="project-drawer custom-scrollbar overflow-y-auto border-l border-gray-700"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+    <>
+      {/* Backdrop */}
+      <motion.div 
+        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={handleBackdropClick}
+      />
+      
+      {/* Drawer */}
+      <motion.div 
+        className="fixed top-0 right-0 bottom-0 w-full sm:w-96 md:w-[32rem] bg-black/90 border-l border-gray-700 shadow-lg overflow-y-auto z-[9999]"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+      >
+        <div className="p-4 md:p-6 relative">
+          {/* Close button */}
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-800/70 hover:bg-gray-700/70 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Close drawer"
           >
-            <div className="p-4 md:p-6 relative">
-              {/* Close button */}
-              <button 
-                onClick={onClose}
-                className="absolute top-4 right-4 p-2 rounded-full bg-gray-800/70 hover:bg-gray-700/70 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Close drawer"
-              >
-                <IconX size={24} className="text-gray-400" />
-              </button>
+            <IconX size={24} className="text-gray-400" />
+          </button>
+          
+          <div className="mt-6 md:mt-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-blue-400 pr-8 font-['IBM_Plex_Sans']">
+              {project.title}
+            </h2>
+            
+            <div className="mt-3 mb-6 text-base text-gray-300 leading-relaxed font-['IBM_Plex_Sans']">
+              {project.description}
+            </div>
+            
+            {/* Actions */}
+            <div className="flex flex-wrap gap-3 mb-6">
+              {project.repo && (
+                <a 
+                  href={project.repo} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors font-['IBM_Plex_Sans']"
+                >
+                  <IconBrandGithub size={18} />
+                  View on GitHub
+                </a>
+              )}
               
-              <div className="mt-6 md:mt-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-blue-400 pr-8 font-['IBM_Plex_Sans']">
-                  {project.title}
-                </h2>
-                
-                <div className="mt-3 mb-6 text-base text-gray-300 leading-relaxed font-['IBM_Plex_Sans']">
-                  {project.description}
-                </div>
-                
-                {/* Actions */}
-                <div className="flex flex-wrap gap-3 mb-6">
-                  <a 
-                    href={project.repo} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors font-['IBM_Plex_Sans']"
-                  >
-                    <IconBrandGithub size={18} />
-                    View on GitHub
-                  </a>
-                  
-                  {project.liveDemoUrl && (
-                    <a 
-                      href={project.liveDemoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors font-['IBM_Plex_Sans']"
-                    >
-                      <IconExternalLink size={18} />
-                      Live Demo
-                    </a>
-                  )}
-                </div>
-                
-                {/* Project details */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  {project.role && (
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
-                        <IconBriefcase size={18} />
-                        <span>Role</span>
-                      </div>
-                      <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.role}</div>
-                    </div>
-                  )}
-                  
-                  {project.timeline && (
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
-                        <IconCalendar size={18} />
-                        <span>Timeline</span>
-                      </div>
-                      <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.timeline}</div>
-                    </div>
-                  )}
-                  
-                  {project.teamSize && (
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
-                        <IconUsers size={18} />
-                        <span>Team Size</span>
-                      </div>
-                      <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.teamSize}</div>
-                    </div>
-                  )}
-                  
-                  {project.status && (
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
-                        <IconRocket size={18} />
-                        <span>Status</span>
-                      </div>
-                      <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.status}</div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Key features */}
-                {project.key_features && project.key_features.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-blue-400 mb-3 font-['IBM_Plex_Sans']">Key Features</h3>
-                    <ul className="space-y-2 pl-5 list-disc text-gray-300 text-sm font-['IBM_Plex_Sans']">
-                      {project.key_features.map((feature: string, index: number) => (
-                        <li key={index}>{feature}</li>
-                      ))}
-                    </ul>
+              {project.liveDemoUrl && (
+                <a 
+                  href={project.liveDemoUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors font-['IBM_Plex_Sans']"
+                >
+                  <IconExternalLink size={18} />
+                  Live Demo
+                </a>
+              )}
+            </div>
+            
+            {/* Project details */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              {project.role && (
+                <div className="bg-gray-800/50 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
+                    <IconBriefcase size={18} />
+                    <span>Role</span>
                   </div>
-                )}
-                
-                {/* Tech stack */}
-                <div>
-                  <h3 className="text-lg font-semibold text-blue-400 mb-3 font-['IBM_Plex_Sans']">Tech Stack</h3>
-                  <div className="flex flex-wrap gap-3">
-                    {project.stack.map((icon: JSX.Element, idx: number) => (
-                      <div key={idx} className="p-2 bg-gray-800/70 rounded-md">
-                        {icon}
-                      </div>
-                    ))}
+                  <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.role}</div>
+                </div>
+              )}
+              
+              {project.timeline && (
+                <div className="bg-gray-800/50 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
+                    <IconCalendar size={18} />
+                    <span>Timeline</span>
                   </div>
+                  <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.timeline}</div>
+                </div>
+              )}
+              
+              {project.teamSize && (
+                <div className="bg-gray-800/50 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
+                    <IconUsers size={18} />
+                    <span>Team Size</span>
+                  </div>
+                  <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.teamSize}</div>
+                </div>
+              )}
+              
+              {project.status && (
+                <div className="bg-gray-800/50 p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-blue-400 font-medium mb-1 font-['IBM_Plex_Sans']">
+                    <IconRocket size={18} />
+                    <span>Status</span>
+                  </div>
+                  <div className="text-gray-300 text-sm font-['IBM_Plex_Sans']">{project.status}</div>
+                </div>
+              )}
+            </div>
+            
+            {/* Key features */}
+            {project.key_features && project.key_features.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-blue-400 mb-3 font-['IBM_Plex_Sans']">Key Features</h3>
+                <ul className="space-y-2 pl-5 list-disc text-gray-300 text-sm font-['IBM_Plex_Sans']">
+                  {project.key_features.map((feature: string, index: number) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {/* Tech stack */}
+            {project.stack && project.stack.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-blue-400 mb-3 font-['IBM_Plex_Sans']">Tech Stack</h3>
+                <div className="flex flex-wrap gap-3">
+                  {project.stack.map((icon: JSX.Element, idx: number) => (
+                    <div key={idx} className="p-2 bg-gray-800/70 rounded-md">
+                      {icon}
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </>
   );
 };
 

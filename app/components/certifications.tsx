@@ -179,7 +179,7 @@ const Certifications = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      className="z-50 min-h-screen w-full p-4 md:p-8 lg:p-12 snap-center bg-gradient-to-b from-black/30 to-transparent"
+      className=" min-h-screen w-full p-4 md:p-8 lg:p-12 snap-center bg-gradient-to-b from-black/30 to-transparent"
       id="certifications"
     >
       <div className="max-w-[1400px] mx-auto">

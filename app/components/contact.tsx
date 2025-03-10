@@ -1,13 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input, TextArea } from "./ui/input";
 import { cn } from "@/lib/utils";
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandOnlyfans,
-} from "@tabler/icons-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -115,47 +110,48 @@ function Contact() {
       setIsSubmitting(false);
     }
   };
+  
   return (
     <div
-      className="max-w-4xl w-full justify-center snap-center mt-8 md:mt-11 flex flex-col mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black"
+      className="max-w-4xl w-full justify-center snap-center mt-8 md:mt-11 flex flex-col mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-lg dark:bg-black/30   bg-gray-900 border border-gray-800"
       id="contact"
     >
       <Toaster />
       <div>
-        <h2 className="font-bold text-3xl md:text-4xl text-neutral-800 dark:text-neutral-200">
+        <h2 className="font-bold text-3xl md:text-4xl text-neutral-200">
           Get In touch
         </h2>
-        <p className="text-neutral-600 text-sm md:text-lg mt-2 dark:text-neutral-300">
+        <p className="text-neutral-300 text-sm md:text-lg mt-2">
           You can alternatively contact me at:
-          <span className="block md:inline font-bold mt-1 md:mt-0 md:pl-3 md:text-xl">
+          <span className="block md:inline font-bold mt-1 md:mt-0 md:pl-3 md:text-xl text-blue-400">
             omarelmasaoudi04@gmail.com
           </span>
         </p>
       </div>
 
       <form className="my-6 md:my-8" onSubmit={handleSubmit}>
-        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mb-4">
+        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mb-4 ">
           <LabelInputContainer className="md:w-1/2">
-            <Label htmlFor="firstName">First name</Label>
+            <Label htmlFor="firstName" className="text-neutral-300">First name</Label>
             <Input
               id="firstname"
               name="firstName"
               placeholder="First Name"
               type="text"
-              className="bg-white"
+              className="bg-black/40 border-gray-700 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={formData.firstName}
               onChange={handleChange}
               required
             />
           </LabelInputContainer>
           <LabelInputContainer className="md:w-1/2">
-            <Label htmlFor="lastName">Last name</Label>
+            <Label htmlFor="lastName" className="text-neutral-300">Last name</Label>
             <Input
               id="lastname"
               name="lastName"
               placeholder="Last Name"
               type="text"
-              className="bg-white"
+              className="bg-black/40 border-gray-700 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={formData.lastName}
               onChange={handleChange}
               required
@@ -164,13 +160,13 @@ function Contact() {
         </div>
         <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer className="md:w-1/2">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="email" className="text-neutral-300">Email Address</Label>
             <Input
               placeholder="example_email@gmail.com"
               id="email"
               type="email"
               name="email"
-              className="bg-white"
+              className="bg-black/40 border-gray-700 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={formData.email}
               onChange={handleChange}
               required
@@ -178,13 +174,13 @@ function Contact() {
           </LabelInputContainer>
 
           <LabelInputContainer className="md:w-1/2">
-            <Label htmlFor="phone">Phone Number <span className="text-xs text-gray-500">(Optional)</span></Label>
+            <Label htmlFor="phone" className="text-neutral-300">Phone Number <span className="text-xs text-gray-500">(Optional)</span></Label>
             <Input
               placeholder="Your phone number"
               id="phone"
               type="tel"
               name="phone"
-              className="bg-white"
+              className="bg-black/40 border-gray-700 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={formData.phone}
               onChange={handleChange}
             />
@@ -192,12 +188,12 @@ function Contact() {
         </div>
 
         <LabelInputContainer className="mb-6 md:mb-8">
-          <Label htmlFor="message">Your Message</Label>
+          <Label htmlFor="message" className="text-neutral-300">Your Message</Label>
           <TextArea
             placeholder="Write your message here..."
             id="message"
             name="message"
-            className="min-h-[120px] md:min-h-[150px] bg-white resize-y"
+            className="min-h-[120px] md:min-h-[150px] bg-black/40 border-gray-700 text-white resize-y focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             value={formData.message}
             onChange={handleChange}
             required
@@ -205,7 +201,7 @@ function Contact() {
         </LabelInputContainer>
 
         <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-12 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          className="bg-gradient-to-br relative group/btn from-blue-900 to-blue-700 block w-full text-white rounded-md h-12 font-medium shadow-[0px_1px_0px_0px_#ffffff20_inset,0px_-1px_0px_0px_#ffffff10_inset] border border-blue-800"
           type="submit"
           disabled={isSubmitting}
         >
@@ -229,7 +225,7 @@ function Contact() {
           </p>
         )}
 
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+        <div className="bg-gradient-to-r from-transparent via-blue-800/30 to-transparent my-8 h-[1px] w-full" />
       </form>
     </div>
   );
@@ -238,8 +234,8 @@ function Contact() {
 const BottomGradient = () => {
   return (
     <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-blue-300 to-transparent" />
     </>
   );
 };
